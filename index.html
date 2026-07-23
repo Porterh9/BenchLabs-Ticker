@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BenchLabs Stock Ticker Setup</title>
+<style>
+:root{--teal:#0099CC;--bg:#212121;--card:#404040;--border:#505050;--text:#fff;--dim:#CCCCCC}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);padding:24px;max-width:440px;margin:auto}
+h1{color:var(--teal);font-size:22px;margin-bottom:4px}
+.sub{color:var(--dim);font-size:13px;margin-bottom:20px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.step h3{margin:0 0 8px 0;font-size:15px;color:var(--teal)}
+.step p{margin:4px 0;font-size:13px;color:#dcdcdc;line-height:1.5}
+.step a{color:var(--teal)}
+ol{margin:6px 0 0 18px;padding:0;font-size:13px;color:#dcdcdc;line-height:1.6}
+label{display:block;margin-top:14px;font-size:13px;color:var(--dim)}
+input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid var(--border);background:#2b2b2b;color:#fff;font-size:14px}
+button{margin-top:24px;width:100%;padding:13px;border-radius:8px;border:none;background:var(--teal);color:#fff;font-weight:700;font-size:16px}
+button:disabled{opacity:0.5}
+#status{margin-top:14px;font-size:13px;text-align:center;min-height:18px}
+.ok{color:#3ddc84}
+.err{color:#ff6b6b}
+small{color:#999}
+</style>
+</head>
+<body>
+
+<h1>BenchLabs Stock Ticker</h1>
+<div class="sub">Step 2 of 2 — finish setup over your regular WiFi.</div>
+
+<div class="step">
+  <h3>Get a free Finnhub API key</h3>
+  <p>Finnhub is the live stock data provider your device polls for prices. A free account includes real-time US quotes.</p>
+  <ol>
+    <li>Go to <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a> and create a free account</li>
+    <li>Your API key is shown on the <a href="https://finnhub.io/dashboard" target="_blank">Dashboard</a> page after signing in</li>
+    <li>Copy it and paste it below</li>
+  </ol>
+</div>
+
+<div class="step">
+  <h3>Device address</h3>
+  <p>Shown on the device's screen right now (something like <code>192.168.1.42</code>). Your phone needs to be on the <b>same WiFi network</b> as the device for this step to work.</p>
+  <label>Device Address</label>
+  <input id="deviceIp" placeholder="192.168.1.42" required>
+</div>
+
+<div class="step">
+  <h3>Finnhub &amp; Watchlist</h3>
+  <label>Finnhub API Key</label>
+  <input id="fhkey" placeholder="Paste key here" required>
+  <label>Stocks to watch <small>(comma-separated, up to 5)</small></label>
+  <input id="tickers" placeholder="AAPL,TSLA,NVDA" required>
+</div>
+
+<button id="submitBtn" onclick="submitConfig()">Save to Device</button>
+<div id="status"></div>
+
+<script>
+async function submitConfig() {
+  const ip = document.getElementById('deviceIp').value.trim();
+  const fhkey = document.getElementById('fhkey').value.trim();
+  const tickers = document.getElementById('tickers').value.trim();
+  const status = document.getElementById('status');
+  const btn = document.getElementById('submitBtn');
+
+  if (!ip || !fhkey || !tickers) {
+    status.className = 'err';
+    status.textContent = 'Fill in all three fields first.';
+    return;
+  }
+
+  btn.disabled = true;
+  status.className = '';
+  status.textContent = 'Sending to device...';
+
+  const body = new URLSearchParams();
+  body.append('fhkey', fhkey);
+  body.append('tickers', tickers);
+
+  try {
+    const res = await fetch('http://' + ip + '/configure', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString()
+    });
+    if (res.ok) {
+      status.className = 'ok';
+      status.textContent = 'Saved! Check the device — it should be showing live prices now.';
+    } else {
+      status.className = 'err';
+      status.textContent = 'Device responded with an error. Double-check the fields and try again.';
+    }
+  } catch (e) {
+    status.className = 'err';
+    status.textContent = "Couldn't reach the device. Make sure your phone is on the same WiFi network as the device (not cellular, not a different network).";
+  }
+  btn.disabled = false;
+}
+</script>
+
+</body>
+</html>
