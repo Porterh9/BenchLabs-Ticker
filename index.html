@@ -17,9 +17,10 @@ h1{color:var(--teal);font-size:22px;margin-bottom:4px}
 ol{margin:6px 0 0 18px;padding:0;font-size:13px;color:#dcdcdc;line-height:1.6}
 label{display:block;margin-top:14px;font-size:13px;color:var(--dim)}
 input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid var(--border);background:#2b2b2b;color:#fff;font-size:14px}
-button{margin-top:24px;width:100%;padding:13px;border-radius:8px;border:none;background:var(--teal);color:#fff;font-weight:700;font-size:16px}
+button{margin-top:14px;width:100%;padding:13px;border-radius:8px;border:none;background:var(--teal);color:#fff;font-weight:700;font-size:16px}
+button.secondary{background:#2b2b2b;border:1px solid var(--border);color:var(--dim);font-weight:600}
 button:disabled{opacity:0.5}
-#status{margin-top:14px;font-size:13px;text-align:center;min-height:18px}
+#testStatus,#status{margin-top:10px;font-size:13px;text-align:center;min-height:18px}
 .ok{color:#3ddc84}
 .err{color:#ff6b6b}
 small{color:#999}
@@ -42,9 +43,11 @@ small{color:#999}
 
 <div class="step">
   <h3>Device address</h3>
-  <p>Shown on the device's screen right now (something like <code>192.168.1.42</code>). Your phone needs to be on the <b>same WiFi network</b> as the device for this step to work.</p>
+  <p>Shown on the device's screen right now (something like <code>192.168.1.42</code>). Your phone needs to be on the <b>same WiFi network</b> as the device for this step to work — not cellular, not a guest network.</p>
   <label>Device Address</label>
   <input id="deviceIp" placeholder="192.168.1.42" required>
+  <button class="secondary" onclick="testConnection()">Test Connection</button>
+  <div id="testStatus"></div>
 </div>
 
 <div class="step">
@@ -59,6 +62,37 @@ small{color:#999}
 <div id="status"></div>
 
 <script>
+function deviceUrl(path) {
+  const ip = document.getElementById('deviceIp').value.trim();
+  return 'http://' + ip + path;
+}
+
+async function testConnection() {
+  const ip = document.getElementById('deviceIp').value.trim();
+  const testStatus = document.getElementById('testStatus');
+  if (!ip) {
+    testStatus.className = 'err';
+    testStatus.textContent = 'Enter the device address first.';
+    return;
+  }
+  testStatus.className = '';
+  testStatus.textContent = 'Checking...';
+  try {
+    const res = await fetch(deviceUrl('/status'), { method: 'GET' });
+    if (res.ok) {
+      const data = await res.json();
+      testStatus.className = 'ok';
+      testStatus.textContent = 'Found it! Connected to "' + data.device + '".';
+    } else {
+      testStatus.className = 'err';
+      testStatus.textContent = 'Device responded but with an error (HTTP ' + res.status + ').';
+    }
+  } catch (e) {
+    testStatus.className = 'err';
+    testStatus.textContent = "Can't reach that address. Double-check it matches the device screen exactly, and that your phone is on the same WiFi network.";
+  }
+}
+
 async function submitConfig() {
   const ip = document.getElementById('deviceIp').value.trim();
   const fhkey = document.getElementById('fhkey').value.trim();
@@ -68,7 +102,7 @@ async function submitConfig() {
 
   if (!ip || !fhkey || !tickers) {
     status.className = 'err';
-    status.textContent = 'Fill in all three fields first.';
+    status.textContent = 'Fill in all fields first.';
     return;
   }
 
@@ -81,7 +115,7 @@ async function submitConfig() {
   body.append('tickers', tickers);
 
   try {
-    const res = await fetch('http://' + ip + '/configure', {
+    const res = await fetch(deviceUrl('/configure'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body.toString()
@@ -95,7 +129,7 @@ async function submitConfig() {
     }
   } catch (e) {
     status.className = 'err';
-    status.textContent = "Couldn't reach the device. Make sure your phone is on the same WiFi network as the device (not cellular, not a different network).";
+    status.textContent = "Couldn't reach the device. Make sure your phone is on the same WiFi network as the device.";
   }
   btn.disabled = false;
 }
