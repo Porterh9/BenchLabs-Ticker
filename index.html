@@ -89,7 +89,7 @@ async function testConnection() {
     }
   } catch (e) {
     testStatus.className = 'err';
-    testStatus.textContent = "Can't reach that address. Double-check it matches the device screen exactly, and that your phone is on the same WiFi network.";
+    testStatus.textContent = "Can't reach that address. Double-check it matches the BenchLabs screen exactly, and that this device is on the same WiFi network as the BenchLabs screen.";
   }
 }
 
@@ -129,7 +129,7 @@ async function submitConfig() {
     }
   } catch (e) {
     status.className = 'err';
-    status.textContent = "Couldn't reach the device. Make sure your phone is on the same WiFi network as the device.";
+    status.textContent = "Couldn't reach the BenchLabs screen. Make sure this device is on the same WiFi network as the BenchLabs screen.";
   }
   btn.disabled = false;
 }
