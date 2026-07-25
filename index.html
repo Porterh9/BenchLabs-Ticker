@@ -1,137 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BenchLabs Stock Ticker Setup</title>
+<title>BenchLabs Stock Ticker — Setup</title>
 <style>
-:root{--teal:#0099CC;--bg:#000000;--card:#1a1a1a;--border:#404040;--text:#fff;--dim:#CCCCCC}
-*{box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);padding:24px;max-width:440px;margin:auto}
-h1{color:var(--teal);font-size:22px;margin-bottom:4px}
-.sub{color:var(--dim);font-size:13px;margin-bottom:20px}
-.step{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
-.step h3{margin:0 0 8px 0;font-size:15px;color:var(--teal)}
-.step p{margin:4px 0;font-size:13px;color:#dcdcdc;line-height:1.5}
-.step a{color:var(--teal)}
-ol{margin:6px 0 0 18px;padding:0;font-size:13px;color:#dcdcdc;line-height:1.6}
-label{display:block;margin-top:14px;font-size:13px;color:var(--dim)}
-input{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid var(--border);background:#2b2b2b;color:#fff;font-size:14px}
-button{margin-top:14px;width:100%;padding:13px;border-radius:8px;border:none;background:var(--teal);color:#fff;font-weight:700;font-size:16px}
-button.secondary{background:#2b2b2b;border:1px solid var(--border);color:var(--dim);font-weight:600}
-button:disabled{opacity:0.5}
-#testStatus,#status{margin-top:10px;font-size:13px;text-align:center;min-height:18px}
-.ok{color:#3ddc84}
-.err{color:#ff6b6b}
-small{color:#999}
+:root{--teal:#0099CC;--bg:#000;--card:#111;--border:#222;--text:#f5f5f5;--muted:#888}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:24px;max-width:460px;margin:auto}
+.header{text-align:center;margin-bottom:28px}
+.logo{width:56px;height:56px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:20px;font-weight:800;color:#000}
+h1{font-size:24px;font-weight:700}
+h1 span{color:var(--teal)}
+.subtitle{color:var(--muted);font-size:14px;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.card h3{font-size:15px;color:var(--teal);margin-bottom:10px}
+.card p{font-size:13px;color:#cdd;line-height:1.6;margin:4px 0}
+.card a{color:var(--teal)}
+ol{margin:8px 0 0 18px;font-size:13px;color:#cdd;line-height:1.7}
+label{display:block;margin-top:14px;font-size:13px;color:var(--muted)}
+input{width:100%;padding:11px 13px;margin-top:6px;border-radius:8px;border:1px solid var(--border);background:#0a0a0a;color:#fff;font-size:16px}
+input:focus{outline:none;border-color:var(--teal)}
+input.error{border-color:#e74c3c}
+button{display:block;width:100%;margin-top:20px;padding:13px;border-radius:8px;border:none;background:var(--teal);color:#000;font-weight:700;font-size:15px;cursor:pointer}
+button:active{transform:scale(0.98)}
+.footer{text-align:center;margin-top:20px;font-size:12px;color:#333}
+small{color:#666}
 </style>
 </head>
 <body>
 
-<h1>BenchLabs Stock Ticker</h1>
-<div class="sub">Step 2 of 2 — finish setup over your regular WiFi.</div>
+<div class="header">
+  <div class="logo">BL</div>
+  <h1>BenchLabs <span>Ticker</span></h1>
+  <p class="subtitle">Device setup — 2 easy steps</p>
+</div>
 
-<div class="step">
-  <h3>Get a free Finnhub API key</h3>
-  <p>Finnhub is the live stock data provider your device polls for prices. A free account includes real-time US quotes.</p>
+<div class="card">
+  <h3>Step 1 — Get a free Finnhub API key</h3>
+  <p>Finnhub provides the live stock prices your device shows. A free account includes real-time US quotes.</p>
   <ol>
-    <li>Go to <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a> and create a free account</li>
-    <li>Your API key is shown on the <a href="https://finnhub.io/dashboard" target="_blank">Dashboard</a> page after signing in</li>
+    <li>Go to <a href="https://finnhub.io/register" target="_blank" rel="noopener">finnhub.io/register</a> and make a free account</li>
+    <li>Your API key is on the <a href="https://finnhub.io/dashboard" target="_blank" rel="noopener">Dashboard</a> after you sign in</li>
     <li>Copy it and paste it below</li>
   </ol>
 </div>
 
-<div class="step">
-  <h3>Device address</h3>
-  <p>Shown on the device's screen right now (something like <code>192.168.1.42</code>). Your phone needs to be on the <b>same WiFi network</b> as the device for this step to work — not cellular, not a guest network.</p>
-  <label>Device Address</label>
-  <input id="deviceIp" placeholder="192.168.1.42" required>
-  <button class="secondary" onclick="testConnection()">Test Connection</button>
-  <div id="testStatus"></div>
+<div class="card">
+  <h3>Step 2 — Enter your details</h3>
+  <p>Your phone can be on normal WiFi or cellular for this step.</p>
+
+  <label for="deviceIp">Device Address <small>(shown on the device screen, e.g. 192.168.1.42)</small></label>
+  <input type="text" id="deviceIp" placeholder="192.168.1.42" autocomplete="off" spellcheck="false" inputmode="decimal">
+
+  <label for="fhkey">Finnhub API Key</label>
+  <input type="text" id="fhkey" placeholder="Paste your key" autocomplete="off" spellcheck="false">
+
+  <label for="tickers">Stocks to Watch <small>(comma-separated, up to 5)</small></label>
+  <input type="text" id="tickers" placeholder="AAPL,TSLA,NVDA" autocomplete="off" spellcheck="false">
+
+  <button onclick="sendToDevice()">Save to Device &rarr;</button>
 </div>
 
-<div class="step">
-  <h3>Finnhub &amp; Watchlist</h3>
-  <label>Finnhub API Key</label>
-  <input id="fhkey" placeholder="Paste key here" required>
-  <label>Stocks to watch <small>(comma-separated, up to 5)</small></label>
-  <input id="tickers" placeholder="AAPL,TSLA,NVDA" required>
-</div>
-
-<button id="submitBtn" onclick="submitConfig()">Save to Device</button>
-<div id="status"></div>
+<p class="footer">BenchLabs &nbsp;·&nbsp; set up once, watch live</p>
 
 <script>
-function deviceUrl(path) {
-  const ip = document.getElementById('deviceIp').value.trim();
-  return 'http://' + ip + path;
-}
-
-async function testConnection() {
-  const ip = document.getElementById('deviceIp').value.trim();
-  const testStatus = document.getElementById('testStatus');
-  if (!ip) {
-    testStatus.className = 'err';
-    testStatus.textContent = 'Enter the device address first.';
-    return;
-  }
-  testStatus.className = '';
-  testStatus.textContent = 'Checking...';
-  try {
-    const res = await fetch(deviceUrl('/status'), { method: 'GET' });
-    if (res.ok) {
-      const data = await res.json();
-      testStatus.className = 'ok';
-      testStatus.textContent = 'Found it! Connected to "' + data.device + '".';
-    } else {
-      testStatus.className = 'err';
-      testStatus.textContent = 'Device responded but with an error (HTTP ' + res.status + ').';
-    }
-  } catch (e) {
-    testStatus.className = 'err';
-    testStatus.textContent = "Can't reach that address. Double-check it matches the BenchLabs screen exactly, and that this device is on the same WiFi network as the BenchLabs screen.";
-  }
-}
-
-async function submitConfig() {
+function sendToDevice() {
   const ip = document.getElementById('deviceIp').value.trim();
   const fhkey = document.getElementById('fhkey').value.trim();
   const tickers = document.getElementById('tickers').value.trim();
-  const status = document.getElementById('status');
-  const btn = document.getElementById('submitBtn');
 
-  if (!ip || !fhkey || !tickers) {
-    status.className = 'err';
-    status.textContent = 'Fill in all fields first.';
-    return;
-  }
+  let ok = true;
+  ['deviceIp','fhkey','tickers'].forEach(id => document.getElementById(id).classList.remove('error'));
+  if (!ip.match(/^[\d.]+$/)) { document.getElementById('deviceIp').classList.add('error'); ok = false; }
+  if (!fhkey) { document.getElementById('fhkey').classList.add('error'); ok = false; }
+  if (!tickers) { document.getElementById('tickers').classList.add('error'); ok = false; }
+  if (!ok) return;
 
-  btn.disabled = true;
-  status.className = '';
-  status.textContent = 'Sending to device...';
-
-  const body = new URLSearchParams();
-  body.append('fhkey', fhkey);
-  body.append('tickers', tickers);
-
-  try {
-    const res = await fetch(deviceUrl('/configure'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString()
-    });
-    if (res.ok) {
-      status.className = 'ok';
-      status.textContent = 'Saved! Check the device — it should be showing live prices now.';
-    } else {
-      status.className = 'err';
-      status.textContent = 'Device responded with an error. Double-check the fields and try again.';
-    }
-  } catch (e) {
-    status.className = 'err';
-    status.textContent = "Couldn't reach the BenchLabs screen. Make sure this device is on the same WiFi network as the BenchLabs screen.";
-  }
-  btn.disabled = false;
+  // Navigate the browser directly to the device (plain GET). A full-page
+  // navigation from this HTTPS page to the device's HTTP address is
+  // allowed by browsers, whereas a background fetch()/POST is blocked by
+  // mixed-content policy. This mirrors the Spotify Remote's /callback flow.
+  const url = 'http://' + ip
+    + '/configure?fhkey=' + encodeURIComponent(fhkey)
+    + '&tickers=' + encodeURIComponent(tickers);
+  window.location.href = url;
 }
 </script>
 
