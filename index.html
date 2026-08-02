@@ -53,8 +53,8 @@ small{color:#666}
   <label for="deviceIp">Device Address <small>(shown on the device screen, e.g. 192.168.1.42)</small></label>
   <input type="text" id="deviceIp" placeholder="192.168.1.42" autocomplete="off" spellcheck="false" inputmode="decimal">
 
-  <label for="fhkey">Finnhub API Key</label>
-  <input type="text" id="fhkey" placeholder="Paste your key" autocomplete="off" spellcheck="false">
+  <label for="fhkey">Finnhub API Key <small>(leave blank to keep your existing key)</small></label>
+  <input type="text" id="fhkey" placeholder="Only needed for first-time setup" autocomplete="off" spellcheck="false">
 
   <label for="tickers">Stocks to Watch <small>(comma-separated, up to 5)</small></label>
   <input type="text" id="tickers" placeholder="AAPL,TSLA,NVDA" autocomplete="off" spellcheck="false">
@@ -73,7 +73,6 @@ function sendToDevice() {
   let ok = true;
   ['deviceIp','fhkey','tickers'].forEach(id => document.getElementById(id).classList.remove('error'));
   if (!ip.match(/^[\d.]+$/)) { document.getElementById('deviceIp').classList.add('error'); ok = false; }
-  if (!fhkey) { document.getElementById('fhkey').classList.add('error'); ok = false; }
   if (!tickers) { document.getElementById('tickers').classList.add('error'); ok = false; }
   if (!ok) return;
 
