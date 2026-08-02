@@ -47,7 +47,17 @@ small{color:#666}
 </div>
 
 <div class="card">
-  <h3>Step 2 — Enter your details</h3>
+  <h3>Step 2 — Get a free Twelve Data API key</h3>
+  <p>Twelve Data draws the price history chart (Finnhub's free plan doesn't include it). Also free, also about a minute.</p>
+  <ol>
+    <li>Go to <a href="https://twelvedata.com/register" target="_blank" rel="noopener">twelvedata.com/register</a> and make a free account</li>
+    <li>Your API key is on the <a href="https://twelvedata.com/account/api-keys" target="_blank" rel="noopener">API Keys</a> page after you sign in</li>
+    <li>Copy it and paste it below</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h3>Step 3 — Enter your details</h3>
   <p>Your phone can be on normal WiFi or cellular for this step.</p>
 
   <label for="deviceIp">Device Address <small>(shown on the device screen, e.g. 192.168.1.42)</small></label>
@@ -55,6 +65,9 @@ small{color:#666}
 
   <label for="fhkey">Finnhub API Key <small>(leave blank to keep your existing key)</small></label>
   <input type="text" id="fhkey" placeholder="Only needed for first-time setup" autocomplete="off" spellcheck="false">
+
+  <label for="tdkey">Twelve Data API Key <small>(leave blank to keep your existing key)</small></label>
+  <input type="text" id="tdkey" placeholder="Only needed for first-time setup" autocomplete="off" spellcheck="false">
 
   <label for="tickers">Stocks to Watch <small>(comma-separated, up to 5)</small></label>
   <input type="text" id="tickers" placeholder="AAPL,TSLA,NVDA" autocomplete="off" spellcheck="false">
@@ -68,10 +81,11 @@ small{color:#666}
 function sendToDevice() {
   const ip = document.getElementById('deviceIp').value.trim();
   const fhkey = document.getElementById('fhkey').value.trim();
+  const tdkey = document.getElementById('tdkey').value.trim();
   const tickers = document.getElementById('tickers').value.trim();
 
   let ok = true;
-  ['deviceIp','fhkey','tickers'].forEach(id => document.getElementById(id).classList.remove('error'));
+  ['deviceIp','fhkey','tdkey','tickers'].forEach(id => document.getElementById(id).classList.remove('error'));
   if (!ip.match(/^[\d.]+$/)) { document.getElementById('deviceIp').classList.add('error'); ok = false; }
   if (!tickers) { document.getElementById('tickers').classList.add('error'); ok = false; }
   if (!ok) return;
@@ -82,6 +96,7 @@ function sendToDevice() {
   // mixed-content policy. This mirrors the Spotify Remote's /callback flow.
   const url = 'http://' + ip
     + '/configure?fhkey=' + encodeURIComponent(fhkey)
+    + '&tdkey=' + encodeURIComponent(tdkey)
     + '&tickers=' + encodeURIComponent(tickers);
   window.location.href = url;
 }
